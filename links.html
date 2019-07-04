@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script type="text/javascript">
+        var BASE_PATH = 'http://localhost:8081/page'
+        
+        function parse_query_string(query) {
+            var vars = query.split("&");
+            var query_string = {};
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                // If first entry with this name
+                if (typeof query_string[pair[0]] === "undefined") {
+                    query_string[pair[0]] = decodeURIComponent(pair[1]);
+                    // If second entry with this name
+                } else if (typeof query_string[pair[0]] === "string") {
+                    var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
+                    query_string[pair[0]] = arr;
+                    // If third or later entry with this name
+                } else {
+                    query_string[pair[0]].push(decodeURIComponent(pair[1]));
+                }
+            }
+            return query_string;
+        }
+
+        function openFirstLink(){
+            window.open(BASE_PATH + '?firstparam=' + parsed_qs.firstParam + '&secondparam=' + parsed_qs.secondParam);
+        }
+
+        function openSecondLink(){
+            window.open(BASE_PATH + '?firstparam=' + parsed_qs.firstParam + '&thirdparam=' + parsed_qs.thirdParam);
+        }
+
+        var parsed_qs = parse_query_string(location.search.substring(1));
+    </script>
+    <button onclick="openFirstLink()">firstLink</button>
+    <button onclick="openSecondLink()">secondLink</button>
+</body>
+</html>
